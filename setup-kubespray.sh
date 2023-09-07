@@ -322,7 +322,7 @@ EOF
 #
 METALLB_PLAYBOOK=
 if [ "$KUBEDOMETALLB" = "1" -a $PUBLICADDRCOUNT -gt 0 ]; then
-    if [ $KUBESPRAYVERSION = "release-2.13" ]; then
+    if [ $KUBESPRAYVERSION = "v2.22.1" ]; then
 	echo "kube_proxy_strict_arp: true" >> $INVDIR/group_vars/k8s-cluster/k8s-cluster.yml
 	METALLB_PLAYBOOK=contrib/metallb/metallb.yml
 	cat kubespray/contrib/metallb/roles/provision/defaults/main.yml | grep -v -- --- >> $OVERRIDES
