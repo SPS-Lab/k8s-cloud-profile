@@ -55,7 +55,7 @@ fi
 if [ -n "$KUBESPRAYVERSION" ]; then
     wget https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/$KUBESPRAYVERSION.tar.gz
     tar xvf $KUBESPRAYVERSION.tar.gz
-    mv kubespray-$KUBESPRAYVERSION kubespray
+    mv kubespray-v$KUBESPRAYVERSION kubespray
     rm $KUBESPRAYVERSION.tar.gz
 fi
 
