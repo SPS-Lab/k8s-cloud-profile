@@ -53,9 +53,9 @@ if [ -e kubespray ]; then
 fi
 
 if [ -n "$KUBESPRAYVERSION" ]; then
-    wget https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/$KUBESPRAYVERSION.tar.gz
-    tar xvf $KUBESPRAYVERSION.tar.gz
-    mv kubespray-v$KUBESPRAYVERSION kubespray
+    wget https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v$KUBESPRAYVERSION.tar.gz
+    tar xvf v$KUBESPRAYVERSION.tar.gz
+    mv kubespray-$KUBESPRAYVERSION kubespray
     rm $KUBESPRAYVERSION.tar.gz
 fi
 
@@ -218,11 +218,6 @@ fi
 if [ -n "${DOCKERVERSION}" ]; then
     cat <<EOF >> $OVERRIDES
 docker_version: ${DOCKERVERSION}
-EOF
-fi
-if [ -n "${KUBEVERSION}" ]; then
-    cat <<EOF >> $OVERRIDES
-kube_version: ${KUBEVERSION}
 EOF
 fi
 if [ -n "$KUBEFEATUREGATES" ]; then
