@@ -53,7 +53,9 @@ if [ -e kubespray ]; then
 fi
 
 if [ -n "$KUBESPRAYVERSION" ]; then
+    echo "DOWNLOAD PHASE"
     wget https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v$KUBESPRAYVERSION.tar.gz
+    echo https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v$KUBESPRAYVERSION.tar.gz
     tar xvf v$KUBESPRAYVERSION.tar.gz
     mv kubespray-$KUBESPRAYVERSION kubespray
     rm $KUBESPRAYVERSION.tar.gz
