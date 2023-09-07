@@ -67,18 +67,13 @@ pc.defineParameter(
     advanced=True)
 pc.defineParameter(
     "kubesprayVersion","Kubespray Version",
-    portal.ParameterType.STRING,"v2.22.1",
+    portal.ParameterType.STRING,"2.22.1",
     longDescription="A tag or commit-ish value; we will run a wget to download this release.  The default value is the most recent stable value we have tested.  You should only change this if you need a new feature only available on `master`, or an old feature from a prior release.  We support versions back to release-2.13 only.  Ubuntu 22 supports only release-2.20 and greater.  You will need to use Ubuntu 20 for anything prior to that.",
     advanced=True)
 pc.defineParameter(
     "kubesprayUseVirtualenv","Kubespray VirtualEnv",
     portal.ParameterType.BOOLEAN,True,
     longDescription="Select if you want Ansible installed in a python virtualenv; deselect to use the system-packaged Ansible.",
-    advanced=True)
-pc.defineParameter(
-    "kubeVersion","Kubernetes Version",
-    portal.ParameterType.STRING,"",
-    longDescription="A specific release of Kubernetes to install; if left empty, Kubespray will choose its current stable version and install that.  You can check for Kubespray-known releases at https://github.com/kubernetes-sigs/kubespray/blob/release-2.16/roles/download/defaults/main.yml (or if you're using a different Kubespray release, choose the corresponding feature release branch in that URL).  You can use unsupported or unknown versions, however, as long as the binaries actually exist.",
     advanced=True)
 pc.defineParameter(
     "helmVersion","Helm Version",
