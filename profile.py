@@ -328,7 +328,7 @@ To change the Ansible and playbook configuration, you can start reading Kubespra
 # Customizable area for forks.
 #
 tourDescription = \
-  "This profile creates a Kubernetes cluster with [Kubespray]().  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
+  "This profile creates a Kubernetes cluster with a recent version of [Kubespray](https://github.com/kubernetes-sigs/kubespray), while also installing Longhorn (IO), Volcano (MPI) and doing modifications for perf. It also defaults to 5 nodes of ARM with Ubuntu 22.04.  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
 
 tourInstructions = kubeInstructions
 
