@@ -131,8 +131,8 @@ pc.defineParameter(
     advanced=True)
 pc.defineParameter(
     "kubeDoMetalLB","Kubespray Enable MetalLB",
-    portal.ParameterType.BOOLEAN,True,
-    longDescription="We enable MetalLB by default, so that users can use an \"external\" load balancer service type.  You need at least one public IP address for this option because it doesn't make sense without one.",
+    portal.ParameterType.BOOLEAN,False,
+    longDescription="We do not enable MetalLB by default, it doesn't seem compatible in newer versions of K8S. But you need at least one public IP address for this option because it doesn't make sense without one.",
     advanced=True)
 pc.defineParameter(
     "publicIPCount", "Number of public IP addresses",
