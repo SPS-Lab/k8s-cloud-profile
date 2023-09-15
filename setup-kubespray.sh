@@ -530,7 +530,9 @@ while [ $tries -gt 0 ]; do
     fi
 done
 
-kubectl apply -f https://raw.githubusercontent.com/volcano-sh/volcano/master/installer/volcano-development.yaml
+wget https://github.com/volcano-sh/volcano/archive/refs/tags/v1.8.0.tar.gz
+tar xvf v1.8.0.tar.gz 
+kubectl create -f volcano-1.8.0/installer/volcano-development.yaml 
 kubectl wait pod -n volcano-system --for=condition=Ready --all
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
 kubectl wait pod -n longhorn-system --for=condition=Ready --all
