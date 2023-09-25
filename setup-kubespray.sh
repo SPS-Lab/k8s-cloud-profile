@@ -80,7 +80,7 @@ if [ $KUBESPRAYUSEVIRTUALENV -eq 1 ]; then
     $PIP install -r kubespray/requirements.txt
     find $KUBESPRAY_VIRTUALENV -name ansible-playbook
     if [ ! $? -eq 0 ]; then
-	$PIP install ansible==2.9
+	$PIP install ansible
     fi
 else
     maybe_install_packages software-properties-common ${PYTHONPKGPREFIX}-pip
@@ -320,6 +320,7 @@ EOF
 METALLB_PLAYBOOK=
 if [ "$KUBEDOMETALLB" = "1" -a $PUBLICADDRCOUNT -gt 0 ]; then
     if [ $KUBESPRAYVERSION = "2.22.1" ]; then
+    echo "testing"
 	echo "kube_proxy_strict_arp: true" >> $INVDIR/group_vars/k8s-cluster/k8s-cluster.yml
 	METALLB_PLAYBOOK=contrib/metallb/metallb.yml
 	cat kubespray/contrib/metallb/roles/provision/defaults/main.yml | grep -v -- --- >> $OVERRIDES
