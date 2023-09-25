@@ -37,11 +37,11 @@ pc = portal.Context()
 #
 pc.defineParameter(
     "nodeCount","Number of Nodes",
-    portal.ParameterType.INTEGER,3,
+    portal.ParameterType.INTEGER,5,
     longDescription="Number of nodes in your kubernetes cluster.  Should be either 1, or >= 3.")
 pc.defineParameter(
     "nodeType","Hardware Type",
-    portal.ParameterType.NODETYPE,"",
+    portal.ParameterType.NODETYPE,"m400",
     longDescription="A specific hardware type to use for each node.  Cloudlab clusters all have machines of specific types.  When you set this field to a value that is a specific hardware type, you will only be able to instantiate this profile on clusters with machines of that type.  If unset, when you instantiate the profile, the resulting experiment may have machines of any available type allocated.")
 pc.defineParameter(
     "linkSpeed","Experiment Link Speed",
@@ -328,7 +328,7 @@ To change the Ansible and playbook configuration, you can start reading Kubespra
 # Customizable area for forks.
 #
 tourDescription = \
-  "This profile creates a Kubernetes cluster with [Kubespray]().  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
+"This profile creates a Kubernetes cluster with a recent version of [Kubespray](https://github.com/kubernetes-sigs/kubespray), while also installing Longhorn (IO), Volcano (MPI) and doing modifications for perf. It also defaults to 5 nodes of ARM with Ubuntu 22.04, and installs Open MPI locally.  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
 
 tourInstructions = kubeInstructions
 

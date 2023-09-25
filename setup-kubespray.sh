@@ -12,6 +12,8 @@ fi
 logtstart "kubespray"
 
 maybe_install_packages dma
+maybe_install_packages wget
+maybe_install_packages vim
 maybe_install_packages mailutils
 echo "$PFQDN" | $SUDO tee /etc/mailname
 sleep 2
