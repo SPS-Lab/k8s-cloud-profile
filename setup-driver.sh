@@ -6,8 +6,8 @@ set -x
 ln -s /local/logs/setup.log /local/setup/setup-driver.log
 
 ALLNODESCRIPTS="setup-ssh.sh setup-disk-space.sh"
-HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-mpi-perf.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-end.sh"
-WORKERNODESCRIPTS="setup-nfs-client.sh setup-mpi-perf.sh"
+HEADNODESCRIPTS="setup-nfs-server.sh setup-nginx.sh setup-ssl.sh setup-kubespray.sh setup-kubernetes-extra.sh setup-end.sh"
+WORKERNODESCRIPTS="setup-nfs-client.sh"
 
 export SRC=`dirname $0`
 cd $SRC

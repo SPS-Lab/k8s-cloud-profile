@@ -37,11 +37,11 @@ pc = portal.Context()
 #
 pc.defineParameter(
     "nodeCount","Number of Nodes",
-    portal.ParameterType.INTEGER,5,
+    portal.ParameterType.INTEGER,3,
     longDescription="Number of nodes in your kubernetes cluster.  Should be either 1, or >= 3.")
 pc.defineParameter(
     "nodeType","Hardware Type",
-    portal.ParameterType.NODETYPE,"m400",
+    portal.ParameterType.NODETYPE,"",
     longDescription="A specific hardware type to use for each node.  Cloudlab clusters all have machines of specific types.  When you set this field to a value that is a specific hardware type, you will only be able to instantiate this profile on clusters with machines of that type.  If unset, when you instantiate the profile, the resulting experiment may have machines of any available type allocated.")
 pc.defineParameter(
     "linkSpeed","Experiment Link Speed",
@@ -62,18 +62,23 @@ pc.defineParameter(
 pc.defineParameter(
     "kubesprayRepo","Kubespray Git Repository",
     portal.ParameterType.STRING,
-    "https://github.com/kubernetes-incubator/kubespray.git",
+    "https://github.com/kubernetes-sigs/kubespray.git",
     longDescription="Do not change this value unless you know what you are doing!  Changing would only be necessary if you have a modified fork of Kubespray.  This must be a publicly-accessible repository.",
     advanced=True)
 pc.defineParameter(
     "kubesprayVersion","Kubespray Version",
-    portal.ParameterType.STRING,"2.22.1",
-    longDescription="A tag or commit-ish value; we will run a wget to download this release.  The default value is the most recent stable value we have tested.  You should only change this if you need a new feature only available on `master`, or an old feature from a prior release.  We support versions back to release-2.13 only.  Ubuntu 22 supports only release-2.20 and greater.  You will need to use Ubuntu 20 for anything prior to that.",
+    portal.ParameterType.STRING,"release-2.23",
+    longDescription="A tag or commit-ish value; we will run `git checkout <value>`.  The default value is the most recent stable value we have tested.  You should only change this if you need a new feature only available on `master`, or an old feature from a prior release.  We support versions back to release-2.13 only.  Ubuntu 22 supports only release-2.20 and greater.  You will need to use Ubuntu 20 for anything prior to that.",
     advanced=True)
 pc.defineParameter(
     "kubesprayUseVirtualenv","Kubespray VirtualEnv",
     portal.ParameterType.BOOLEAN,True,
     longDescription="Select if you want Ansible installed in a python virtualenv; deselect to use the system-packaged Ansible.",
+    advanced=True)
+pc.defineParameter(
+    "kubeVersion","Kubernetes Version",
+    portal.ParameterType.STRING,"",
+    longDescription="A specific release of Kubernetes to install (e.g. v1.16.3); if left empty, Kubespray will choose its current stable version and install that.  You can check for Kubespray-known releases at https://github.com/kubernetes-sigs/kubespray/blob/release-2.16/roles/download/defaults/main.yml (or if you're using a different Kubespray release, choose the corresponding feature release branch in that URL).  You can use unsupported or unknown versions, however, as long as the binaries actually exist.",
     advanced=True)
 pc.defineParameter(
     "helmVersion","Helm Version",
@@ -132,7 +137,7 @@ pc.defineParameter(
 pc.defineParameter(
     "kubeDoMetalLB","Kubespray Enable MetalLB",
     portal.ParameterType.BOOLEAN,True,
-    longDescription="Load balance. You need at least one public IP address for this option because it doesn't make sense without one.",
+    longDescription="We enable MetalLB by default, so that users can use an \"external\" load balancer service type.  You need at least one public IP address for this option because it doesn't make sense without one.",
     advanced=True)
 pc.defineParameter(
     "publicIPCount", "Number of public IP addresses",
@@ -157,7 +162,7 @@ pc.defineParameter(
 pc.defineParameter(
     "kubeAllWorkers","Kube Master is Worker",
     portal.ParameterType.BOOLEAN,False,
-    longDescription="Allow the kube master to be a worker in the multi-node case (always true for single-node clusters); e by default.",
+    longDescription="Allow the kube master to be a worker in the multi-node case (always true for single-node clusters); disabled by default.",
     advanced=True)
 pc.defineParameter(
     "sslCertType","SSL Certificate Type",
@@ -323,7 +328,7 @@ To change the Ansible and playbook configuration, you can start reading Kubespra
 # Customizable area for forks.
 #
 tourDescription = \
-  "This profile creates a Kubernetes cluster with a recent version of [Kubespray](https://github.com/kubernetes-sigs/kubespray), while also installing Longhorn (IO), Volcano (MPI) and doing modifications for perf. It also defaults to 5 nodes of ARM with Ubuntu 22.04, and installs Open MPI locally.  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
+  "This profile creates a Kubernetes cluster with [Kubespray]().  When you click the Instantiate button, you'll be presented with a list of parameters that you can change to control what your Kubernetes cluster will look like; read the parameter documentation on that page (or in the Instructions)."
 
 tourInstructions = kubeInstructions
 

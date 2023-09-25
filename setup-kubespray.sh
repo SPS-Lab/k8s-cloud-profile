@@ -12,7 +12,6 @@ fi
 logtstart "kubespray"
 
 maybe_install_packages dma
-maybe_install_packages wget
 maybe_install_packages mailutils
 echo "$PFQDN" | $SUDO tee /etc/mailname
 sleep 2
@@ -51,14 +50,9 @@ cd $OURDIR
 if [ -e kubespray ]; then
     rm -rf kubespray
 fi
-
+git clone $KUBESPRAYREPO kubespray
 if [ -n "$KUBESPRAYVERSION" ]; then
-    echo "DOWNLOAD PHASE"
-    wget https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v$KUBESPRAYVERSION.tar.gz
-    echo https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v$KUBESPRAYVERSION.tar.gz
-    tar xvf v$KUBESPRAYVERSION.tar.gz
-    mv kubespray-$KUBESPRAYVERSION kubespray
-    rm $KUBESPRAYVERSION.tar.gz
+    cd kubespray && git checkout "$KUBESPRAYVERSION" && cd ..
 fi
 
 #
@@ -80,7 +74,7 @@ if [ $KUBESPRAYUSEVIRTUALENV -eq 1 ]; then
     $PIP install -r kubespray/requirements.txt
     find $KUBESPRAY_VIRTUALENV -name ansible-playbook
     if [ ! $? -eq 0 ]; then
-	$PIP install ansible
+	$PIP install ansible==2.9
     fi
 else
     maybe_install_packages software-properties-common ${PYTHONPKGPREFIX}-pip
@@ -222,6 +216,11 @@ if [ -n "${DOCKERVERSION}" ]; then
 docker_version: ${DOCKERVERSION}
 EOF
 fi
+if [ -n "${KUBEVERSION}" ]; then
+    cat <<EOF >> $OVERRIDES
+kube_version: ${KUBEVERSION}
+EOF
+fi
 if [ -n "$KUBEFEATUREGATES" ]; then
     echo "kube_feature_gates: $KUBEFEATUREGATES" \
 	>> $OVERRIDES
@@ -319,8 +318,8 @@ EOF
 #
 METALLB_PLAYBOOK=
 if [ "$KUBEDOMETALLB" = "1" -a $PUBLICADDRCOUNT -gt 0 ]; then
-    if [ $KUBESPRAYVERSION = "2.22.1" ]; then
-	echo "kube_proxy_strict_arp: true" >> $INVDIR/group_vars/k8s_cluster/k8s-cluster.yml
+    if [ $KUBESPRAYVERSION = "release-2.13" ]; then
+	echo "kube_proxy_strict_arp: true" >> $INVDIR/group_vars/k8s-cluster/k8s-cluster.yml
 	METALLB_PLAYBOOK=contrib/metallb/metallb.yml
 	cat kubespray/contrib/metallb/roles/provision/defaults/main.yml | grep -v -- --- >> $OVERRIDES
 	echo "metallb:" >/tmp/metallb.yml
@@ -531,5 +530,4 @@ while [ $tries -gt 0 ]; do
 done
 
 logtend "kubespray"
-
 touch $OURDIR/kubespray-done
