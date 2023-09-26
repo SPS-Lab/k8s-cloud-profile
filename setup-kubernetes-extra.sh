@@ -158,7 +158,7 @@ kubectl wait pod -n volcano-system --for=condition=Ready --all
 # Installs influxdb
 git clone https://github.com/raijenki/kubv2.git
 helm repo add influxdata https://helm.influxdata.com/
-helm upgrade --install opencube influxdata/influxdb -f kub2/schemon/values.yaml
+helm upgrade --install opencube influxdata/influxdb -f $OURDIR/kub2/schemon/values.yaml
 kubectl wait pod -n default opencube-influxdb-0 --for=condition=Ready --all
 kubectl get svc opencube-influxdb -o jsonpath='{.spec.clusterIP}' > $OURDIR/influxdb-ip.txt
 INFLUXIP=`cat $OURDIR/influxdb-ip.txt`
