@@ -149,13 +149,28 @@ EOF
 	-f $OURDIR/nfs-provisioner-values.yaml --wait
 fi
 
+# Installs volcano
 wget https://github.com/volcano-sh/volcano/archive/refs/tags/v1.8.0.tar.gz
 tar xvf v1.8.0.tar.gz 
 kubectl create -f volcano-1.8.0/installer/volcano-development.yaml 
 kubectl wait pod -n volcano-system --for=condition=Ready --all
 
+# Installs influxdb
+git clone https://github.com/raijenki/kubv2.git
 helm repo add influxdata https://helm.influxdata.com/
-helm upgrade --install opencube influxdata/influxdb --set image.tag=1.8.10
+helm upgrade --install opencube influxdata/influxdb -f kub2/schemon/values.yaml
+kubectl wait pod -n default opencube-influxdb-0 --for=condition=Ready --all
+kubectl get svc opencube-influxdb -o jsonpath='{.spec.clusterIP}' > $OURDIR/influxdb-ip.txt
+INFLUXIP=`cat $OURDIR/influxdb-ip.txt`
+
+NODE=1
+while [ $NODE -le $NODECOUNT ]
+do  
+    NODENAME=node$NODE
+    kubectl exec -it opencube-influxdb-0 -- influx -execute 'create database node$NODE' 
+    ssh node-$NODE 'git clone https://github.com/raijenki/kubv2.git && cd kubv2/schemon/ && make && ./njmon_Ubuntu22_aarch64_v81 -I -f -s 30 -i $INFLUXIP -p 8086 -x node-$NODE -y admin -z 123456 && exit'
+    NODE=`expr $NODE + 1` 
+done
 
 #kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
 #kubectl wait pod -n longhorn-system --for=condition=Ready --all
