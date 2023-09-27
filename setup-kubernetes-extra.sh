@@ -165,8 +165,8 @@ INFLUXIP=$(cat $OURDIR/influxdb-ip.txt)
 NODE=1
 while [ $NODE -lt $NODECOUNT ]
 do  
-    echo $INFLUXIP
-    kubectl exec -it opencube-influxdb-0 -- influx -execute "create database 'node$NODE'"
+    kubectl exec opencube-influxdb-0 -- influx -execute \"create database 'node$NODE'\"
+    echo "kubectl exec opencube-influxdb-0 -- influx -execute \"create database 'node\$NODE'\""
     ssh node-$NODE "git clone https://github.com/raijenki/kubv2.git && cd kubv2/schemon/ && make && ./njmon_Ubuntu22_aarch64_v81 -I -f -s 30 -i $INFLUXIP -p 8086 -x node$NODE -y admin -z 123456 && exit"
     NODE=$(expr $NODE + 1) 
 done
