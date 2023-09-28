@@ -160,15 +160,16 @@ git clone https://github.com/raijenki/kubv2.git
 helm repo add influxdata https://helm.influxdata.com/
 helm upgrade --install opencube influxdata/influxdb -f $OURDIR/kubv2/schemon/values.yaml
 kubectl wait pod -n default opencube-influxdb-0 --for=condition=Ready --all
+sleep 60
 kubectl get svc opencube-influxdb -o jsonpath='{.spec.clusterIP}' > $OURDIR/influxdb-ip.txt
 INFLUXIP=$(cat $OURDIR/influxdb-ip.txt)
 NODE=1
 while [ $NODE -lt $NODECOUNT ]
 do  
-    curl --user admin:123456 -XPOST \'http://$INFLUXIP:8086/query\' --data-urlencode \'q=CREATE DATABASE \"node$NODE\"\'
     #kubectl exec opencube-influxdb-0 -- influx -execute \""create database node$NODE"\"
     #echo kubectl exec opencube-influxdb-0 -- influx -execute \""create database node$NODE"\"
     ssh node-$NODE "git clone https://github.com/raijenki/kubv2.git && cd kubv2/schemon/ && make && ./njmon_Ubuntu22_aarch64_v81 -I -f -s 30 -i $INFLUXIP -p 8086 -x node$NODE -y admin -z 123456 && exit"
+    curl --user admin:123456 -XPOST \'http://$INFLUXIP:8086/query\' --data-urlencode \'q=CREATE DATABASE \"node$NODE\"\'
     NODE=$(expr $NODE + 1) 
 done
 
